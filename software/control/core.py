@@ -2,6 +2,7 @@
 import os 
 os.environ["QT_API"] = "pyqt5"
 import qtpy
+import random
 
 # qt libraries
 from qtpy.QtCore import *
@@ -76,11 +77,15 @@ class Waveforms(QObject):
     def update_waveforms(self):
         self.time = self.time + (1/1000)*WAVEFORMS.UPDATE_INTERVAL_MS
         self.time = self.time%WAVEFORMS.DISPLAY_RANGE_S
-        readout = self.microcontroller.read_received_packet_nowait()
-        if readout is not None:
-            self.Paw = (utils.unsigned_to_signed(readout[0:2],MicrocontrollerDef.N_BYTES_DATA)/(65536/2))*MicrocontrollerDef.PAW_FS 
-            self.Flow = (utils.unsigned_to_signed(readout[2:4],MicrocontrollerDef.N_BYTES_DATA)/(65536/2))*MicrocontrollerDef.FLOW_FS
-            self.Volume = (utils.unsigned_to_unsigned(readout[4:6],MicrocontrollerDef.N_BYTES_DATA)/65536)*MicrocontrollerDef.VOLUME_FS
+        # readout = self.microcontroller.read_received_packet_nowait()
+        # if readout is not None:
+        #     self.Paw = (utils.unsigned_to_signed(readout[0:2],MicrocontrollerDef.N_BYTES_DATA)/(65536/2))*MicrocontrollerDef.PAW_FS 
+        #     self.Flow = (utils.unsigned_to_signed(readout[2:4],MicrocontrollerDef.N_BYTES_DATA)/(65536/2))*MicrocontrollerDef.FLOW_FS
+        #     self.Volume = (utils.unsigned_to_unsigned(readout[4:6],MicrocontrollerDef.N_BYTES_DATA)/65536)*MicrocontrollerDef.VOLUME_FS
+
+        self.Paw = (self.Paw + 0.1)%5 + random.uniform(-0.1, 0.1)
+        self.Volume = (self.Volume + 0.1)%5 + random.uniform(-0.1, 0.1)
+        self.Flow = (self.Flow + 0.1)%5 + random.uniform(-0.1, 0.1)
         
         self.signal_Paw.emit(self.time,self.Paw)
         self.signal_Flow.emit(self.time,self.Flow)
@@ -93,7 +98,4 @@ class Waveforms(QObject):
         # print(self.Volume)
         # print('----------')
 
-        # self.Paw = (self.Paw + 0.01)%5
-        # self.Volume = (self.Volume + 0.01)%5
-        # self.Flow = (self.Flow + 0.01)%5
         # print(self.Paw)
