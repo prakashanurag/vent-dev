@@ -1,5 +1,5 @@
 # set QT_API environment variable
-import os 
+import os
 os.environ["QT_API"] = "pyqt5"
 import qtpy
 
@@ -9,9 +9,9 @@ from qtpy.QtWidgets import *
 from qtpy.QtGui import *
 
 # app specific libraries
-import control.widgets as widgets
-import control.core as core
-import control.microcontroller as microcontroller
+import ventapp.control.widgets as widgets
+import ventapp.control.core as core
+import ventapp.control.microcontroller as microcontroller
 
 class VentDevGUI(QMainWindow):
 
@@ -30,7 +30,7 @@ class VentDevGUI(QMainWindow):
 		# load widgets
 		self.navigationWidget = widgets.stepperMotorWidget(self.stepperMotorController)
 		self.waveformDisplay = widgets.WaveformDisplay()
-		
+
 		# layout widgets
 		layout = QGridLayout() #layout = QStackedLayout()
 		# layout.addWidget(self.navigationWidget,0,0)

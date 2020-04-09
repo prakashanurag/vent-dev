@@ -1,5 +1,5 @@
 # set QT_API environment variable
-import os 
+import os
 os.environ["QT_API"] = "pyqt5"
 import qtpy
 
@@ -8,8 +8,8 @@ from qtpy.QtCore import *
 from qtpy.QtWidgets import *
 from qtpy.QtGui import *
 
-import control.utils as utils
-from control._def import *
+import ventapp.control.utils as utils
+from ventapp.control._def import *
 
 from queue import Queue
 import time
@@ -76,15 +76,15 @@ class Waveforms(QObject):
         self.time = self.time%WAVEFORMS.DISPLAY_RANGE_S
         readout = self.microcontroller.read_received_packet_nowait()
         if readout is not None:
-            self.Paw = (utils.unsigned_to_signed(readout[0:2],MicrocontrollerDef.N_BYTES_DATA)/(65536/2))*MicrocontrollerDef.PAW_FS 
+            self.Paw = (utils.unsigned_to_signed(readout[0:2],MicrocontrollerDef.N_BYTES_DATA)/(65536/2))*MicrocontrollerDef.PAW_FS
             self.Flow = (utils.unsigned_to_signed(readout[2:4],MicrocontrollerDef.N_BYTES_DATA)/(65536/2))*MicrocontrollerDef.FLOW_FS
             self.Volume = (utils.unsigned_to_unsigned(readout[4:6],MicrocontrollerDef.N_BYTES_DATA)/65536)*MicrocontrollerDef.VOLUME_FS
-        
+
         self.signal_Paw.emit(self.time,self.Paw)
         self.signal_Flow.emit(self.time,self.Flow)
         self.signal_Volume.emit(self.time,self.Volume)
 
-        
+
 
         # print(self.Paw)
         # print(self.Flow)

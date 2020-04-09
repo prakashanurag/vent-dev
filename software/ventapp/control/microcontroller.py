@@ -4,7 +4,7 @@ import serial.tools.list_ports
 import time
 import numpy as np
 
-from control._def import *
+from ventapp.control._def import *
 
 # add user to the dialout group to avoid the need to use sudo
 
@@ -40,7 +40,7 @@ class Microcontroller():
         cmd[0] = 3
         cmd[1] = state
         self.serial.write(cmd)
-    
+
     def toggle_laser(self,state):
         cmd = bytearray(self.tx_buffer_length)
         cmd[0] = 4
@@ -96,7 +96,7 @@ class Microcontroller():
         cmd[3] = int(command[2])                                                   #Homing
         cmd[4] = int(command[3])                                                   #tracking
         cmd[5],cmd[6] = self.split_signed_int_2byte(round(command[4]*100))         #Xerror
-        cmd[7],cmd[8] = self.split_signed_int_2byte(round(command[5]*100))         #Yerror                           
+        cmd[7],cmd[8] = self.split_signed_int_2byte(round(command[5]*100))         #Yerror
         cmd[9],cmd[10] = self.split_signed_int_2byte(round(command[6]*100))        #Zerror
         cmd[11],cmd[12] = self.split_int_2byte(round(0))#command[9]*10))               #averageDt (millisecond with two digit after coma) BUG
         cmd[13] = int(command[8])                                               # LED intensity
@@ -105,7 +105,7 @@ class Microcontroller():
         cmd[14] = int(command[9])
         # Adding Sampling Interval for other Video Streams
         # Minimum 10 ms (0.01 s) Maximum: 3600 s (1 hour)
-        # Min value: 1 to 360000 
+        # Min value: 1 to 360000
         # print('Interval command sent {}'.format(command[10]))
         cmd[15], cmd[16] = self.split_int_2byte(round(100*command[10]))
         '''
@@ -125,7 +125,7 @@ class Microcontroller():
             print('getting rid of old data')
             for i in range(num_bytes_in_rx_buffer-self.rx_buffer_length):
                 self.serial.read()
-        
+
         # read the buffer
         data=[]
         for i in range(self.rx_buffer_length):
@@ -157,14 +157,14 @@ class Microcontroller():
             return None
         if self.serial.in_waiting % self.rx_buffer_length != 0:
             return None
-        
+
         # get rid of old data
         num_bytes_in_rx_buffer = self.serial.in_waiting
         if num_bytes_in_rx_buffer > self.rx_buffer_length:
             print('getting rid of old data')
             for i in range(num_bytes_in_rx_buffer-self.rx_buffer_length):
                 self.serial.read()
-        
+
         # read the buffer
         data=[]
         for i in range(self.rx_buffer_length):
@@ -180,7 +180,7 @@ class Microcontroller_Simulation():
 
     def toggle_LED(self,state):
         pass
-    
+
     def toggle_laser(self,state):
         pass
 

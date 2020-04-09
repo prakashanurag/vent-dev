@@ -1,5 +1,5 @@
 # set QT_API environment variable
-import os 
+import os
 os.environ["QT_API"] = "pyqt5"
 import qtpy
 
@@ -9,11 +9,14 @@ from qtpy.QtWidgets import *
 from qtpy.QtGui import *
 
 # app specific libraries
-import control.gui as gui
+import ventapp.control.gui as gui
 
-if __name__ == "__main__":
-
+def main():
     app = QApplication([])
     win = gui.VentDevGUI()
     win.show()
     app.exec_() #sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    main()
